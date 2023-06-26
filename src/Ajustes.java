@@ -15,7 +15,6 @@ public class Ajustes extends javax.swing.JFrame {
      */
     private Ajustes() {
         initComponents();
-        
         VValoracion=new Valoracion(this,true);
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
         int posX = (pantalla.width - this.getWidth()) / 2;
@@ -46,10 +45,10 @@ public class Ajustes extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         BValorar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        CBDark = new javax.swing.JCheckBox();
 
         PAjustes.setBackground(new java.awt.Color(153, 204, 255));
+        PAjustes.setLayout(new java.awt.GridLayout(5, 1, 0, 5));
 
         jButton1.setText("Borra Nombre");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -57,6 +56,7 @@ public class Ajustes extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
+        PAjustes.add(jButton1);
 
         BValorar.setText("Valorar");
         BValorar.addActionListener(new java.awt.event.ActionListener() {
@@ -64,40 +64,41 @@ public class Ajustes extends javax.swing.JFrame {
                 BValorarActionPerformed(evt);
             }
         });
+        PAjustes.add(BValorar);
 
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("----------");
+        PAjustes.add(jLabel1);
 
-        javax.swing.GroupLayout PAjustesLayout = new javax.swing.GroupLayout(PAjustes);
-        PAjustes.setLayout(PAjustesLayout);
-        PAjustesLayout.setHorizontalGroup(
-            PAjustesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PAjustesLayout.createSequentialGroup()
-                .addGroup(PAjustesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PAjustesLayout.createSequentialGroup()
-                        .addGap(61, 61, 61)
-                        .addComponent(jButton1))
-                    .addGroup(PAjustesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(PAjustesLayout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, PAjustesLayout.createSequentialGroup()
-                            .addGap(77, 77, 77)
-                            .addComponent(BValorar))))
-                .addContainerGap(77, Short.MAX_VALUE))
-        );
-        PAjustesLayout.setVerticalGroup(
-            PAjustesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PAjustesLayout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(BValorar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
-                .addContainerGap(19, Short.MAX_VALUE))
-        );
+        CBDark.setText("Modo Oscuro");
+        CBDark.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                CBDarkStateChanged(evt);
+            }
+        });
+        CBDark.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CBDarkActionPerformed(evt);
+            }
+        });
+        PAjustes.add(CBDark);
 
-        getContentPane().add(PAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(PAjustes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(PAjustes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -113,6 +114,15 @@ public class Ajustes extends javax.swing.JFrame {
         // TODO add your handling code here:
         VValoracion.setVisible(true);
     }//GEN-LAST:event_BValorarActionPerformed
+
+    private void CBDarkStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_CBDarkStateChanged
+        // TODO add your handling code here:
+        modoOscuro(CBDark.isSelected());
+    }//GEN-LAST:event_CBDarkStateChanged
+
+    private void CBDarkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CBDarkActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CBDarkActionPerformed
     
     /**
      * @param args the command line arguments
@@ -148,12 +158,20 @@ public class Ajustes extends javax.swing.JFrame {
             }
         });
     }
+    private void modoOscuro(boolean cambiar) {
+        Color nuevoColor = cambiar ? Color.DARK_GRAY : null;
+        getContentPane().setBackground(nuevoColor);
+        Vpinta.getContentPane().setBackground(nuevoColor);
+        VValoracion.getContentPane().setBackground(nuevoColor);
+        Vprin.getContentPane().setBackground(nuevoColor);
+    }
     
     private Principal Vprin;
     private Pintado Vpinta;
     private Valoracion VValoracion;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JButton BValorar;
+    javax.swing.JCheckBox CBDark;
     javax.swing.JPanel PAjustes;
     javax.swing.JButton jButton1;
     javax.swing.JLabel jLabel1;

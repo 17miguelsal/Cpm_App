@@ -6,7 +6,6 @@ import java.awt.Toolkit;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-
 /**
  *
  * @author migue
@@ -18,17 +17,19 @@ public class Valoracion extends javax.swing.JDialog {
     /**
      * Creates new form NoEncontrado
      */
-    public Valoracion(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    private Valoracion() {
         initComponents();
+        
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
         int posX = (pantalla.width - this.getWidth()) / 2;
         int posY = (pantalla.height - this.getHeight()) / 2;
         this.setLocation(posX, posY);
-      
+
     }
-    public Valoracion(Ajustes VAjustes){
-        this.VAjustes=VAjustes;
+
+    public Valoracion(Ajustes VAjustes, boolean modal) {
+        this();
+        this.VAjustes = VAjustes;
     }
 
     /**
@@ -46,6 +47,7 @@ public class Valoracion extends javax.swing.JDialog {
         EnviarButton = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Poco satisfecho", "Algo satisfecho", "Bastante satisfecho", "Muy satifecho" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
@@ -53,8 +55,10 @@ public class Valoracion extends javax.swing.JDialog {
                 jComboBox1ActionPerformed(evt);
             }
         });
+        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 37, -1, -1));
 
         jLabel1.setText("Valore su satisfacción con esta interfaz");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 6, -1, 25));
 
         EnviarButton.setText("Enviar");
         EnviarButton.addActionListener(new java.awt.event.ActionListener() {
@@ -62,45 +66,23 @@ public class Valoracion extends javax.swing.JDialog {
                 EnviarButtonActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(66, 66, 66)
-                        .addComponent(EnviarButton)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(EnviarButton)
-                .addContainerGap(49, Short.MAX_VALUE))
-        );
+        jPanel1.add(EnviarButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(72, 71, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         pack();
@@ -109,13 +91,11 @@ public class Valoracion extends javax.swing.JDialog {
     private void EnviarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EnviarButtonActionPerformed
         // TODO add your handling code here:
         this.setVisible(false);
-        
-        
     }//GEN-LAST:event_EnviarButtonActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
-        val =jComboBox1.getSelectedItem().toString();
+        String val = jComboBox1.getSelectedItem().toString();
         VAjustes.setEtiqueta(val);
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
@@ -152,7 +132,7 @@ public class Valoracion extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Valoracion dialog = new Valoracion(new javax.swing.JFrame(), true);
+                Valoracion dialog = new Valoracion((Ajustes) new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

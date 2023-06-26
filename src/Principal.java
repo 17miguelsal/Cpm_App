@@ -1,14 +1,20 @@
 
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.File;
 import java.util.Random;
 import javax.swing.JDialog;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JList;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author migue
@@ -20,19 +26,26 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal() {
         initComponents();
-        
+
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
         int posX = (pantalla.width - this.getWidth()) / 2;
         int posY = (pantalla.height - this.getHeight()) / 2;
         this.setLocation(posX, posY);
-        
+
         VP = new Pintado();
         User = " ";
         DNotFound = new NotFound(this, true);
         inicio = new Inicio(this);
         inicio.setVisible(true);
-        VAjustes=new Ajustes(VP, this);
-        
+        VAjustes = new Ajustes(VP, this);
+        VAñadir = new AñadirDialog(this, true);
+        VAñadir.setAux(LSugeridos);
+        ReciComboBox.removeAllItems();
+        fileChooser = new JFileChooser();
+    }
+
+    public void setJList(JList<String> jList) {
+        LSugeridos = jList;
     }
 
     /**
@@ -51,6 +64,8 @@ public class Principal extends javax.swing.JFrame {
         jNombre = new javax.swing.JTextField();
         BAcept = new javax.swing.JButton();
         BRset = new javax.swing.JButton();
+        LFoto = new javax.swing.JLabel();
+        BFoto = new javax.swing.JButton();
         SPJuegos = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
         BPintar = new javax.swing.JButton();
@@ -61,20 +76,28 @@ public class Principal extends javax.swing.JFrame {
         BFifa = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jPanel2 = new javax.swing.JPanel();
+        PCaratulas = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        ReciComboBox = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        LSugeridos = new javax.swing.JList<>();
+        jLabel8 = new javax.swing.JLabel();
         L_Icon = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        CerrarMenu = new javax.swing.JMenuItem();
+        Majustes = new javax.swing.JMenu();
+        MIOpciones = new javax.swing.JMenuItem();
+        MICerrar = new javax.swing.JMenuItem();
         MEditar = new javax.swing.JMenu();
         MAyuda = new javax.swing.JMenu();
         MVolverInicio = new javax.swing.JMenuItem();
+        MAñadidos = new javax.swing.JMenu();
+        MIAñadir = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("PlayStation0");
@@ -112,36 +135,63 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        LFoto.setBackground(new java.awt.Color(255, 255, 204));
+        LFoto.setForeground(new java.awt.Color(255, 255, 255));
+        LFoto.setCursor(new java.awt.Cursor(java.awt.Cursor.N_RESIZE_CURSOR));
+
+        BFoto.setText("Añadir Foto de Perfil");
+        BFoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BFotoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pUsuarioLayout = new javax.swing.GroupLayout(pUsuario);
         pUsuario.setLayout(pUsuarioLayout);
         pUsuarioLayout.setHorizontalGroup(
             pUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pUsuarioLayout.createSequentialGroup()
-                .addContainerGap(74, Short.MAX_VALUE)
-                .addGroup(pUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap(98, Short.MAX_VALUE)
+                .addGroup(pUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(pUsuarioLayout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pUsuarioLayout.createSequentialGroup()
-                        .addComponent(BAcept, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(108, 108, 108)
-                        .addComponent(BRset)))
-                .addGap(104, 104, 104))
+                        .addComponent(LFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(BFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pUsuarioLayout.createSequentialGroup()
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(pUsuarioLayout.createSequentialGroup()
+                            .addGap(6, 6, 6)
+                            .addComponent(BAcept, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(91, 91, 91)
+                            .addComponent(BRset))))
+                .addGap(144, 144, 144))
         );
         pUsuarioLayout.setVerticalGroup(
             pUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pUsuarioLayout.createSequentialGroup()
-                .addGap(65, 65, 65)
-                .addGroup(pUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGap(37, 37, 37)
+                .addGap(35, 35, 35)
                 .addGroup(pUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BRset, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BAcept, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(69, Short.MAX_VALUE))
+                    .addComponent(jLabel1)
+                    .addComponent(jNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(BAcept, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BRset, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pUsuarioLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(LFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(30, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pUsuarioLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(BFoto)
+                        .addGap(53, 53, 53))))
         );
+
+        LFoto.setOpaque(true);
 
         jTabbedPane1.addTab("Usuario", pUsuario);
 
@@ -238,49 +288,25 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane1.setViewportBorder(javax.swing.BorderFactory.createCompoundBorder(null, javax.swing.BorderFactory.createCompoundBorder()));
         jScrollPane1.setMaximumSize(new java.awt.Dimension(3276, 32767));
 
-        jPanel2.setBackground(new java.awt.Color(153, 204, 255));
+        PCaratulas.setBackground(new java.awt.Color(153, 204, 255));
+        PCaratulas.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/Cpb00119_c01.png"))); // NOI18N
+        PCaratulas.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 6, 188, 186));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/5367726.png-c_310_420_x-f_jpg-q_x-xxyxx.jpg"))); // NOI18N
+        PCaratulas.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 6, -1, 186));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/61cMbV1O1KL._CR75,0,349,349_UX25.jpg"))); // NOI18N
+        PCaratulas.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 6, 188, 186));
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/unnamed.png"))); // NOI18N
+        PCaratulas.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 6, -1, 186));
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/png-transparent-fifa-14-fifa-15-.jpg"))); // NOI18N
+        PCaratulas.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(819, 6, 205, 186));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jScrollPane1.setViewportView(jPanel2);
+        jScrollPane1.setViewportView(PCaratulas);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -295,12 +321,54 @@ public class Principal extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE))
         );
 
         SPJuegos.setRightComponent(jPanel5);
 
         jTabbedPane1.addTab("Juegos", SPJuegos);
+
+        ReciComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI Emoji", 3, 18)); // NOI18N
+        jLabel2.setText("Jugados recientemente:");
+
+        jScrollPane2.setViewportView(LSugeridos);
+
+        jLabel8.setText("Juegos que has recomendado:");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addComponent(ReciComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(46, 46, 46))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(ReciComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
+        );
+
+        jTabbedPane1.addTab("Recientes", jPanel3);
 
         L_Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ps00.png"))); // NOI18N
 
@@ -308,26 +376,26 @@ public class Principal extends javax.swing.JFrame {
         jMenuBar1.setForeground(new java.awt.Color(204, 204, 255));
         jMenuBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jMenu1.setText("Ajustes");
+        Majustes.setText("Ajustes");
 
-        jMenuItem1.setText("Opciones");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        MIOpciones.setText("Opciones");
+        MIOpciones.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                MIOpcionesActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        Majustes.add(MIOpciones);
 
-        CerrarMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        CerrarMenu.setText("Cerrar");
-        CerrarMenu.addActionListener(new java.awt.event.ActionListener() {
+        MICerrar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        MICerrar.setText("Cerrar");
+        MICerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CerrarMenuActionPerformed(evt);
+                MICerrarActionPerformed(evt);
             }
         });
-        jMenu1.add(CerrarMenu);
+        Majustes.add(MICerrar);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(Majustes);
 
         MEditar.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, new java.awt.Color(153, 153, 255)));
         MEditar.setText("Editar");
@@ -345,6 +413,23 @@ public class Principal extends javax.swing.JFrame {
         MEditar.add(MAyuda);
 
         jMenuBar1.add(MEditar);
+
+        MAñadidos.setText("Añadidos");
+        MAñadidos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MAñadidosActionPerformed(evt);
+            }
+        });
+
+        MIAñadir.setText("Añadir");
+        MIAñadir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MIAñadirActionPerformed(evt);
+            }
+        });
+        MAñadidos.add(MIAñadir);
+
+        jMenuBar1.add(MAñadidos);
 
         setJMenuBar(jMenuBar1);
 
@@ -370,8 +455,7 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(jUser, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(L_Icon, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jTabbedPane1))
         );
 
         pack();
@@ -383,39 +467,44 @@ public class Principal extends javax.swing.JFrame {
         jUser.setText(User);
         VP.LUser1.setText(User);
     }//GEN-LAST:event_jNombreActionPerformed
-    
+
     private void BPintarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BPintarActionPerformed
         // TODO add your handling code here:
         VP.setVisible(true);
         Random R = new Random();
-        String[] objeto={"perro.", "pájaro.", "coche.", "barco.", "árbol."};
+        String[] objeto = {"perro.", "pájaro.", "coche.", "barco.", "árbol."};
         VP.LDibujo.setText("Dibuja un " + objeto[R.nextInt(3)]);
+        ReciComboBox.addItem(BPintar.getText());
     }//GEN-LAST:event_BPintarActionPerformed
 
     private void BMarioKartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BMarioKartActionPerformed
         // TODO add your handling code here:
-        
         DNotFound.setVisible(true);
+        ReciComboBox.addItem(BMarioKart.getText());
     }//GEN-LAST:event_BMarioKartActionPerformed
 
     private void BPokemonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BPokemonActionPerformed
         // TODO add your handling code here:
         DNotFound.setVisible(true);
+        ReciComboBox.addItem(BPokemon.getText());
     }//GEN-LAST:event_BPokemonActionPerformed
 
     private void BDonkeyKongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BDonkeyKongActionPerformed
         // TODO add your handling code here:
         DNotFound.setVisible(true);
+        ReciComboBox.addItem(BDonkeyKong.getText());
     }//GEN-LAST:event_BDonkeyKongActionPerformed
 
     private void BHeroquestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BHeroquestActionPerformed
         // TODO add your handling code here:
         DNotFound.setVisible(true);
+        ReciComboBox.addItem(BHeroquest.getText());
     }//GEN-LAST:event_BHeroquestActionPerformed
 
     private void BFifaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BFifaActionPerformed
         // TODO add your handling code here:
         DNotFound.setVisible(true);
+        ReciComboBox.addItem(BFifa.getText());
     }//GEN-LAST:event_BFifaActionPerformed
 
     private void BRsetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BRsetActionPerformed
@@ -426,7 +515,9 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_BRsetActionPerformed
 
     private void BAceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BAceptActionPerformed
-
+        User = jNombre.getText();
+        jUser.setText(User);
+        VP.LUser1.setText(User);
     }//GEN-LAST:event_BAceptActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -434,22 +525,43 @@ public class Principal extends javax.swing.JFrame {
         jNombre.requestFocus();
     }//GEN-LAST:event_formWindowOpened
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void MIOpcionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MIOpcionesActionPerformed
         // TODO add your handling code here:
         VAjustes.setVisible(true);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_MIOpcionesActionPerformed
 
-    private void CerrarMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CerrarMenuActionPerformed
+    private void MICerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MICerrarActionPerformed
         // TODO add your handling code here:
         System.exit(0);
-    }//GEN-LAST:event_CerrarMenuActionPerformed
+    }//GEN-LAST:event_MICerrarActionPerformed
 
     private void MVolverInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MVolverInicioActionPerformed
         // TODO add your handling code here:
         inicio.setVisible(true);
         this.setVisible(false);
-        
+
     }//GEN-LAST:event_MVolverInicioActionPerformed
+
+    private void MAñadidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MAñadidosActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_MAñadidosActionPerformed
+
+    private void MIAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MIAñadirActionPerformed
+        // TODO add your handling code here:
+        VAñadir.setVisible(true);
+    }//GEN-LAST:event_MIAñadirActionPerformed
+
+    private void BFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BFotoActionPerformed
+        // TODO add your handling code here:
+        int resultado = fileChooser.showOpenDialog(this);
+        
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            ImageIcon imageIcon = new ImageIcon(selectedFile.getPath());
+            LFoto.setIcon(imageIcon);
+        }
+    }//GEN-LAST:event_BFotoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -486,40 +598,52 @@ public class Principal extends javax.swing.JFrame {
             }
         });
     }
-    Inicio inicio;
+    private Inicio inicio;
+    private AñadirDialog VAñadir;
     private Ajustes VAjustes;
     private NotFound DNotFound;
     private Pintado VP;
     protected String User;
+    private JFileChooser fileChooser;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JButton BAcept;
     javax.swing.JButton BDonkeyKong;
     javax.swing.JButton BFifa;
+    javax.swing.JButton BFoto;
     javax.swing.JButton BHeroquest;
     javax.swing.JButton BMarioKart;
     javax.swing.JButton BPintar;
     javax.swing.JButton BPokemon;
     javax.swing.JButton BRset;
-    javax.swing.JMenuItem CerrarMenu;
+    javax.swing.JLabel LFoto;
+    javax.swing.JList<String> LSugeridos;
     javax.swing.JLabel L_Icon;
     javax.swing.JMenu MAyuda;
+    javax.swing.JMenu MAñadidos;
     javax.swing.JMenu MEditar;
+    javax.swing.JMenuItem MIAñadir;
+    javax.swing.JMenuItem MICerrar;
+    javax.swing.JMenuItem MIOpciones;
     javax.swing.JMenuItem MVolverInicio;
+    javax.swing.JMenu Majustes;
+    javax.swing.JPanel PCaratulas;
+    javax.swing.JComboBox<String> ReciComboBox;
     javax.swing.JSplitPane SPJuegos;
     javax.swing.JLabel jLabel1;
+    javax.swing.JLabel jLabel2;
     javax.swing.JLabel jLabel3;
     javax.swing.JLabel jLabel4;
     javax.swing.JLabel jLabel5;
     javax.swing.JLabel jLabel6;
     javax.swing.JLabel jLabel7;
-    javax.swing.JMenu jMenu1;
+    javax.swing.JLabel jLabel8;
     javax.swing.JMenuBar jMenuBar1;
-    javax.swing.JMenuItem jMenuItem1;
     javax.swing.JTextField jNombre;
     javax.swing.JPanel jPanel1;
-    javax.swing.JPanel jPanel2;
+    javax.swing.JPanel jPanel3;
     javax.swing.JPanel jPanel5;
     javax.swing.JScrollPane jScrollPane1;
+    javax.swing.JScrollPane jScrollPane2;
     javax.swing.JTabbedPane jTabbedPane1;
     javax.swing.JLabel jUser;
     javax.swing.JPanel pUsuario;

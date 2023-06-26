@@ -30,8 +30,6 @@ public class Inicio extends javax.swing.JFrame {
         int posX = (pantalla.width - this.getWidth()) / 2;
         int posY = (pantalla.height - this.getHeight()) / 2;
         this.setLocation(posX, posY);
-      
-        
     }
     public Inicio(Principal Vp){
         this();
